@@ -1,4 +1,4 @@
-#Iterators Guided Project
+# Iterators Guided Project
 
 This project contains several loops which we will replace with Iterators.
 
@@ -6,14 +6,14 @@ The project throws a ***ConcurrentModificationException*** which we will elimina
 
 We will implement additional functionality using ***ListIterators<>***.
 
-##Iterators
+## Iterators
 
 Iterators provide:
 
 1. an alterative to for-loops to go through an entire Collection class linear data structure.
 2. a way to safely add and remove elements while iterating through a collection.
 
-##Iterator Methods
+## Iterator Methods
 The iterator includes three methods that help us traverse a collection:
 
 - **hasNext()**: returns true if the iterator has at least one more element to iterate through.
@@ -22,7 +22,7 @@ The iterator includes three methods that help us traverse a collection:
 
 - **remove()**: removes the current element in the collection and throws an ***IllegalStateException*** if the method is called again after it's already removed the current element.
 
-##ListIterator
+## ListIterator
 
 The *ListIterator<>* is an Iterator which provides additional functionality when working with *List<>* classes. It allows you to traverse the list forward or backward and the ability to add and update elements in the list, in addition to the other iterator methods.
 
