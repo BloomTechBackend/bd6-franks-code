@@ -1,0 +1,253 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 6,
+    "backwardDepth": 6,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.amazon.ata.dynamodbdeleteiterators.classroom.dao.InviteDao",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1414265340 { 
+   	label=amazon
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_110086052 { 
+   	label=ata
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   CreateInviteActivity376866109[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CreateInviteActivity</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   inviteDao: InviteDao [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ handleRequest(invite: Invite): Invite</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CreateInviteActivity_Factory376866109[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CreateInviteActivity_Factory</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   inviteDaoProvider: Provider&lt;InviteDao&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(inviteDaoProvider: Provider&lt;InviteDao&gt;): CreateInviteActivity_Factory</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DeleteMemberActivityTest376866109[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DeleteMemberActivityTest</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   activity: DeleteMemberActivity [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   inviteDao: InviteDao [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   memberDao: MemberDao [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># handleRequest_attemptsToDeleteMember()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+GetInviteActivity376866109[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GetInviteActivity</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   inviteDao: InviteDao [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ handleRequest(eventId: String, memberId: String): Invite</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+GetInviteActivity_Factory376866109[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GetInviteActivity_Factory</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   inviteDaoProvider: Provider&lt;InviteDao&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(inviteDaoProvider: Provider&lt;InviteDao&gt;): GetInviteActivity_Factory</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+GetInvitesForMemberActivity376866109[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GetInvitesForMemberActivity</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   inviteDao: InviteDao [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ handleRequest(memberId: String): List&lt;Invite&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+GetInvitesForMemberActivity_Factory376866109[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GetInvitesForMemberActivity_Factory</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   inviteDaoProvider: Provider&lt;InviteDao&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(inviteDaoProvider: Provider&lt;InviteDao&gt;): GetInvitesForMemberActivity_Factory</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InviteDao147653794[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InviteDao</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   mapper: DynamoDBMapper [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ cancelInvite(eventId: String, memberId: String): Invite</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createInvite(invite: Invite): Invite</TD></TR>
+<TR><TD ALIGN="LEFT" >+ deleteInvite(eventId: String, memberId: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getInvite(eventId: String, memberId: String): Invite</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getInvitesSentToMember(memberId: String): List&lt;Invite&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InviteDaoTest147653794[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InviteDaoTest</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   inviteDao: InviteDao [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mapper: DynamoDBMapper [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># deleteInvite_deleteConditionsNotViolated_returnsTrue()</TD></TR>
+<TR><TD ALIGN="LEFT" ># deleteInvite_deleteConditionsViolated_returnsFalse()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+CreateInviteActivity376866109 -> InviteDao147653794[label="inviteDao
+[0..1]"];
+CreateInviteActivity_Factory376866109 -> InviteDao147653794[label="inviteDaoProvider
+[0..1]"];
+DeleteMemberActivityTest376866109 -> InviteDao147653794[label="inviteDao
+[0..1]"];
+GetInviteActivity376866109 -> InviteDao147653794[label="inviteDao
+[0..1]"];
+GetInviteActivity_Factory376866109 -> InviteDao147653794[label="inviteDaoProvider
+[0..1]"];
+GetInvitesForMemberActivity376866109 -> InviteDao147653794[label="inviteDao
+[0..1]"];
+GetInvitesForMemberActivity_Factory376866109 -> InviteDao147653794[label="inviteDaoProvider
+[0..1]"];
+InviteDaoTest147653794 -> InviteDao147653794[label="inviteDao
+[0..1]"];
+    
+}
+@enduml

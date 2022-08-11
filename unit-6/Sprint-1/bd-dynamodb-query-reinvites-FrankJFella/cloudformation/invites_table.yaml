@@ -1,0 +1,137 @@
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: dynamodbAccessRole
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - dynamodb:*
+              Resource: "*"
+            - Effect: Allow
+              Action:
+              - logs:*
+              Resource: "*"
+  InitFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: >
+          const AWS = require("aws-sdk");
+          const response = require('./cfn-response');
+          const docClient = new AWS.DynamoDB.DocumentClient();
+          exports.handler = function(event, context) {
+            console.log(JSON.stringify(event,null,2));
+            var params = {
+              RequestItems: {
+                "DynamoDBQuery-Invites": [
+                  {
+                    PutRequest: {
+                      Item: {
+                        eventId: "98375E9D-7D3E-4DBF-A5AC-C7800B608F8E",
+                        memberId: "8B64EFB5-9847-43E6-BC42-AF39230AB6DE",
+                        isAttending: true,
+                        timeReceived: "2020-05-01T20:38:25.213-07:00[America/Los_Angeles]"
+                      }
+                    }
+                  },
+                  {
+                    PutRequest: {
+                      Item: {
+                        eventId: "98375E9D-7D3E-4DBF-A5AC-C7800B608F8E",
+                        memberId: "5C0731C5-4BCE-46B0-94A2-7395E87367EB",
+                        isAttending: false,
+                        timeReceived: "2020-05-01T20:38:25.213-07:00[America/Los_Angeles]"
+                      }
+                    }
+                  },
+                  {
+                    PutRequest: {
+                      Item: {
+                        eventId: "DA9B6265-18D9-43CB-874C-567A05DC1F01",
+                        memberId: "18BD88D4-C256-41F8-80F4-0F69FF61E352",
+                        isAttending: true,
+                        timeReceived: "2020-05-01T20:38:25.213-07:00[America/Los_Angeles]"
+                      }
+                    }
+                  },
+                  {
+                    PutRequest: {
+                      Item: {
+                        eventId: "DA9B6265-18D9-43CB-874C-567A05DC1F01",
+                        memberId: "78E54327-E5CA-4CD2-AA0D-E478FE961CC9",
+                        isAttending: false,
+                        timeReceived: "2020-05-01T20:38:25.213-07:00[America/Los_Angeles]"
+                      }
+                    }
+                  },
+                  {
+                    PutRequest: {
+                      Item: {
+                        eventId: "DA9B6265-18D9-43CB-874C-567A05DC1F01",
+                        memberId: "8B64EFB5-9847-43E6-BC42-AF39230AB6DE",
+                        isAttending: false,
+                        timeReceived: "2020-05-01T20:38:25.213-07:00[America/Los_Angeles]"
+                      }
+                    }
+                  }
+                ]
+              }
+            };
+            docClient.batchWrite(params, function(err, data) {
+              if (err) {
+                response.send(event, context, "FAILED", {});
+              } else {
+                response.send(event, context, "SUCCESS", {});
+              }
+            });
+          };
+      Handler: index.handler
+      Role:
+        Fn::GetAtt: [ LambdaRole , "Arn" ]
+      # 2020-02-27: [bp] updated from nodejs10.x in case it matters
+      Runtime: nodejs12.x
+      Timeout: 60
+  DynamoDBQueryInvites:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "eventId"
+          AttributeType: "S"
+        - AttributeName: "memberId"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "eventId"
+          KeyType: "HASH"
+        - AttributeName: "memberId"
+          KeyType: "RANGE"
+      BillingMode: PAY_PER_REQUEST
+      TableName: "DynamoDBQuery-Invites"
+      GlobalSecondaryIndexes:
+        - IndexName: "MemberIdIndex"
+          KeySchema:
+            - AttributeName: "memberId"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: ALL
+  InitializeInvitesTable:
+    Type: Custom::InitFunction
+    DependsOn: DynamoDBQueryInvites
+    Properties:
+      ServiceToken:
+         Fn::GetAtt: [ InitFunction , "Arn" ]
+      DynamoTableName:
+        Ref: DynamoDBQueryInvites
