@@ -1,0 +1,126 @@
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: dynamodbAccessRole
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:*
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - logs:*
+                Resource: "*"
+  InitFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: >
+          const AWS = require("aws-sdk");
+          const response = require('./cfn-response');
+          const docClient = new AWS.DynamoDB.DocumentClient();
+          exports.handler = function(event, context) {
+            console.log(JSON.stringify(event,null,2));
+            var params = {
+              RequestItems: {
+                "Caching-GroupMembershipAudits": [
+                  {
+                    PutRequest: {
+                      Item: {
+                        userId_groupId: "C7800B60-18D9-43CB-874C-567A05DC1F01_98375E9D-7D3E-4DBF-A5AC-C7800B608F8E",
+                        editedAt: "2020-03-07T03:00:00UTC",
+                        auditAction: "ADD"
+                      }
+                    }
+                  },
+                  {
+                    PutRequest: {
+                      Item: {
+                        userId_groupId: "GB7C5465-18D9-43CB-874C-567A05DC1F01_98375E9D-7D3E-4DBF-A5AC-C7800B608F8E",
+                        editedAt: "2020-03-10T03:00:00UTC",
+                        auditAction: "ADD"
+                      }
+                    }
+                  },
+                  {
+                    PutRequest: {
+                      Item: {
+                        userId_groupId: "C7800B60-18D9-43CB-874C-567A05DC1F01_DA9B6265-18D9-43CB-874C-567A05DC1F01",
+                        editedAt: "2020-03-08T03:00:00UTC",
+                        auditAction: "ADD"
+                      }
+                    }
+                  },
+                  {
+                    PutRequest: {
+                      Item: {
+                        userId_groupId: "GB7C5465-18D9-43CB-874C-567A05DC1F01_DA9B6265-18D9-43CB-874C-567A05DC1F01",
+                        editedAt: "2020-03-11T03:00:00UTC",
+                        auditAction: "ADD"
+                      }
+                    }
+                  }
+                ]
+              }
+            };
+            docClient.batchWrite(params, function(err, data) {
+              if (err) {
+                response.send(event, context, "FAILED", {});
+              } else {
+                response.send(event, context, "SUCCESS", {});
+              }
+            });
+          };
+      Handler: index.handler
+      Role:
+        Fn::GetAtt: [ LambdaRole , "Arn" ]
+      # 2020-02-27: [bp] updated from nodejs10.x in case it matters
+      Runtime: nodejs12.x
+      Timeout: 60
+  Unit4CachingClassroomGroupMembershipAudits:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      "AttributeDefinitions" : [
+      {
+        "AttributeName" : "userId_groupId",
+        "AttributeType" : "S"
+      },
+      {
+        "AttributeName": "editedAt",
+        "AttributeType": "S"
+      }
+      ]
+      "KeySchema" : [
+      {
+        "AttributeName" : "userId_groupId",
+        "KeyType" : "HASH"
+      },
+      {
+        "AttributeName": "editedAt",
+        "KeyType": "RANGE"
+      }
+      ]
+      BillingMode: PAY_PER_REQUEST
+      TableName: "Caching-GroupMembershipAudits"
+  InitializeEventsTable:
+    Type: Custom::InitFunction
+    DependsOn: Unit4CachingClassroomGroupMembershipAudits
+    Properties:
+      ServiceToken:
+        Fn::GetAtt: [ InitFunction , "Arn" ]
+      DynamoTableName:
+        Ref: Unit4CachingClassroomGroupMembershipAudits
