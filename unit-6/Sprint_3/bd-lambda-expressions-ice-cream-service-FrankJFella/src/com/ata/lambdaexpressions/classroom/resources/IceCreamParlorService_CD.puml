@@ -1,0 +1,23 @@
+@startuml
+
+class IceCreamParlorService {
+    +getSundae(flavorNames : List<String>) : Sundae
+    +prepareFlavors(flavorNames : List<String>) : int
+    ~buildSundae(cartons : List<Carton>) : Sundae
+    ~makeIceCreamCartons(ingredientQueues : List<Queue<Ingredient>>) : int
+}
+class CartonDao {
+    +getCartonsByFlavorNames(flavorNames : List<String>) : List<Carton>
+}
+class RecipeDao {
+    +getRecipe(flavorName : String) : Recipe
+}
+class IceCreamMaker {
+    +prepareIceCreamCarton(<functional interface>) : boolean
+}
+
+IceCreamParlorService o-- CartonDao
+IceCreamParlorService o-- RecipeDao
+IceCreamParlorService o--- IceCreamMaker
+
+@enduml

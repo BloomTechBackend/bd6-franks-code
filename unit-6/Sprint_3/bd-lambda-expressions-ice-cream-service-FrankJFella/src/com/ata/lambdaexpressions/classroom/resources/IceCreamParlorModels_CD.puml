@@ -1,0 +1,17 @@
+@startuml
+
+class Sundae
+enum Flavor
+class Recipe {
+    -flavorName : String
+}
+enum Ingredient
+class Carton {
+    +isEmpty() : boolean
+}
+
+Sundae o-- "1..*" Flavor
+Carton o-- "1" Flavor
+Recipe o-- "1..*" Ingredient
+
+@enduml
